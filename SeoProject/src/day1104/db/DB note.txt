@@ -1,0 +1,151 @@
+Microsoft Windows [Version 10.0.19041.572]
+(c) 2020 Microsoft Corporation. All rights reserved.
+
+C:\Users\이어진>sqlplus system/manager
+
+SQL*Plus: Release 11.2.0.2.0 Production on 수 11월 4 16:33:36 2020
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+Enter user-name: system/1234
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL> show user
+USER is "SYSTEM"
+SQL> --딕셔너리 시스템이 이미 만들어 놓은 테이블
+SQL> select user_name from dba_users;
+select user_name from dba_users
+       *
+ERROR at line 1:
+ORA-00904: "USER_NAME": invalid identifier
+
+
+SQL> select username from dba_users;
+
+USERNAME
+------------------------------------------------------------
+LEEEOJIN
+SYS
+SYSTEM
+ANONYMOUS
+EOJIN
+USER0907
+APEX_PUBLIC_USER
+FLOWS_FILES
+APEX_040000
+OUTLN
+DIP
+
+USERNAME
+------------------------------------------------------------
+ORACLE_OCM
+XS$NULL
+MDSYS
+CTXSYS
+DBSNMP
+XDB
+APPQOSSYS
+HR
+
+19 rows selected.
+
+SQL> -- 유저 생성하기 DDL
+SQL> show user;
+USER is "SYSTEM"
+SQL> create tablespace space1104
+  2  datafile 'C:\oraclexe\app\oracle\oradata\XE\space1104.dbf'
+  3  10M
+  4  /
+10M
+*
+ERROR at line 3:
+ORA-02180: invalid option for CREATE TABLESPACE
+
+
+SQL> create tablespace space1104
+  2  datafile 'C:\oraclexe\app\oracle\oradata\XE\space1104.dbf'
+  3  10m
+  4  /
+10m
+*
+ERROR at line 3:
+ORA-02180: invalid option for CREATE TABLESPACE
+
+
+SQL> create tablespace space1104
+  2  datafile 'C:\oraclexe\app\oracle\oradata\XE\space1104.dbf'
+  3  size 10m
+  4  /
+
+Tablespace created.
+
+SQL> --유저생성
+SQL> create user user1104
+  2  identified by user1104
+  3  default tablespace space1104
+  4  quota unlimited on space1104
+  5  /
+
+User created.
+
+SQL> --필요한 권한 부여
+SQL> --DCL
+SQL> grant create table,create sequence, create session to user1104;
+
+Grant succeeded.
+
+SQL> --유저로 접속 시도 하고 테이블 생성하자
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create tabel member(
+  2   member_id number primary key
+  3  ,name varchar(20)
+  4  ,age number
+  5  ,phone varchar(20)
+  6* )
+SQL>
+SQL> /
+create tabel member(
+       *
+ERROR at line 1:
+ORA-00901: invalid CREATE command
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create tabel member(
+  2   member_id number primary key
+  3  ,name varchar(20)
+  4  ,age number
+  5  ,phone varchar(20)
+  6* )
+SQL> /
+create tabel member(
+       *
+ERROR at line 1:
+ORA-00901: invalid CREATE command
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create table member(
+  2   member_id number primary key
+  3  ,name varchar(20)
+  4  ,age number
+  5  ,phone varchar(20)
+  6* )
+SQL> /
+
+Table created.
+
+SQL> conn user1104/user1104
+Connected.
