@@ -627,8 +627,8 @@ public class ShoppingApp extends JFrame {
 			pstmt = con.prepareStatement(sql);// 쿼리문준비
 			rs = pstmt.executeQuery();// 쿼리문실행
 
-			if (rs.next()) {//레코드가 있으면
-				//select 메서드는 선택 될 아이템 지정
+			if (rs.next()) {// 레코드가 있으면
+				// select 메서드는 선택 될 아이템 지정
 				ch_top2.select(rs.getString("name"));
 			}
 		} catch (SQLException e) {
@@ -650,20 +650,21 @@ public class ShoppingApp extends JFrame {
 			}
 		}
 	}
+
 	public void setSubCategory(int row) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		String subcategory_id = (String) table.getValueAt(row, 1);
-		String sql = "select * from subcategory where subcategory_id="+subcategory_id;
+		String sql = "select * from subcategory where subcategory_id=" + subcategory_id;
 		System.out.println(sql);
 
 		try {
 			pstmt = con.prepareStatement(sql);// 쿼리문준비
 			rs = pstmt.executeQuery();// 쿼리문실행
 
-			if (rs.next()) {//레코드가 있으면
-				//select 메서드는 선택 될 아이템 지정
+			if (rs.next()) {// 레코드가 있으면
+				// select 메서드는 선택 될 아이템 지정
 				ch_sub2.select(rs.getString("name"));
 			}
 		} catch (SQLException e) {
