@@ -203,7 +203,8 @@ public class ShoppingApp extends JFrame {
 		add(p_east, BorderLayout.EAST);
 
 		connect();// 접속
-		getTopList();// 취상위 가져오기
+		getTopList();// 최상위 가져오기
+		getProductList();// 상품 정보 출력
 
 		// 윈도우 창 닫으면 오라클과의 접속 끊고 프로세스종료
 		this.addWindowListener(new WindowAdapter() {
@@ -243,6 +244,8 @@ public class ShoppingApp extends JFrame {
 		bt_regist.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				regist();
+				getProductList();//등록된 목록 가져오기
+				table.updateUI();//UI갱신
 			}
 		});
 		setSize(1000, 600);
@@ -415,32 +418,71 @@ public class ShoppingApp extends JFrame {
 			}
 		}
 	}
-	//product table의 레코드 가져오기
+
+	// product table의 레코드 가져오기
 	public void getProductList() {
-		String sql="select * from product";
-		
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
+		String sql = "select * from product";
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
-			pstmt=con.prepareStatement(sql);//쿼리준비
-			rs=pstmt.executeQuery();//select문 수행 후 결과표를 rs에 대입
-			
-			//rs의 표 데이터를 ProductController가 보유한 data이차원 배열에 대입
-			//String[][] date=String[총레코드 수][6];
-			rs.next();
-			String[] record=new String[6];
-			record[0]=rs.getString("product_id");
-			record[1]=rs.getString("subcategory_id");
-			record[2]=rs.getString("product_name");
-			record[3]=rs.getString("brand");
-			record[4]=rs.getString("price");
-			record[5]=rs.getString("filename");
-			
+			// PreparedStatement 생성시 인수 2개를 넘겨 전후방향으로 커서를 자유롭게 이동 가능하게할 수 있다.
+			// pstmt=con.prepareStatement(sql);//쿼리준비
+			pstmt = con.prepareStatement(sql, rs.TYPE_SCROLL_INSENSITIVE, rs.CONCUR_READ_ONLY);// 쿼리준비
+			rs = pstmt.executeQuery();// select문 수행 후 결과표를 rs에 대입
+
+			// rs의 메서드 중 .getRow()는 현재 커서의 위치 즉 레코드 어디를 가리키고 있는지를 알 수 있다.
+
+			while (rs.next()) {
+
+			}
+			rs.last();// 커서를 제일 마지막으로 보내기
+
+			int currentRow = rs.getRow();
+			// System.out.println("현재 커서가 가리키는 레코드 번호는"+currentRow);
+			System.out.println("마지막에 도달할 커서의 rowNum" + currentRow);
+			// rs의 표 데이터를 ProductController가 보유한 data이차원 배열에 대입
+
+			String[][] data = new String[currentRow][productController.column.length];
+
+			// 이차원 배열에 데이터를 담으려면 커서를 다시 원상복귀 시켜야 한다.
+			rs.beforeFirst();// 첫번째 레코드 보다 이전으로 되돌림(즉, 위치 초기화)
+			int index = 0;
+			while (rs.next()) {
+				String[] record = new String[productController.column.length];
+				record[0] = rs.getString("product_id");
+				record[1] = rs.getString("subcategory_id");
+				record[2] = rs.getString("product_name");
+				record[3] = rs.getString("brand");
+				record[4] = rs.getString("price");
+				record[5] = rs.getString("filename");
+
+				// 채워진 일차원 배열을 data 이차원 배열에 순서대로 담자
+				data[index++] = record;
+			}
+			// 완성된 이차원 배열을 productController가 보유한 data배열 주소로 대입시켜버리자
+			productController.data = data;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
-	
+
 	// 접속해제
 	public void disconnect() {
 		if (con != null) {
