@@ -1,4 +1,4 @@
-package day1110.network.echo;
+package day1110.network.echocasting;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -71,7 +71,7 @@ public class EchoServer extends JFrame {
 			// 하지만 메인쓰레드는 개발자가 생성하는 일반쓰레드와 하는 역할에 차이가 있다.
 			// 메인쓰레드는 프로그램을 운영해주는 역할 특히 그래픽처리,이벤트처리까지 감당하므로 절대 아래의 업무금지
 			// 1)무한루프에 빠뜨리지 말것
-			// 2)대기상태에 빠지게 하지 말것(accpet(),스트림의 read()...)
+			// 2)대기상태에 빠지게 하지 말것(accept(),스트림의 read()...)
 			// 참고로 안드로이드에서는 메인쓰레드의 1,2번 시도자체를 에러로 본다.
 			// 결론)별도의 쓰레드를 생성하여 처리하자
 			Socket socket = server.accept();// 접속자 감지와 동시에 대화용 소켓 반환

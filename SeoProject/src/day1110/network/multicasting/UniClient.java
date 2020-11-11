@@ -35,8 +35,6 @@ public class UniClient extends JFrame {
 	Socket socket;// 대화용 소켓
 	BufferedReader buffr;
 	BufferedWriter buffw;
-	
-	int key=0;
 
 	public UniClient() {
 		p_north = new JPanel();

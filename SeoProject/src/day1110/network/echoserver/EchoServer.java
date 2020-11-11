@@ -10,7 +10,7 @@
  * 
  * */
 
-package day1110.network.EchoServer;
+package day1110.network.echoserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;

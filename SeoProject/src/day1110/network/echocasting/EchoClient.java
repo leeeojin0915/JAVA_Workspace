@@ -1,4 +1,4 @@
-package day1110.network.echo;
+package day1110.network.echocasting;
 
 import java.awt.BorderLayout;
 import java.awt.Choice;
@@ -105,7 +105,7 @@ public class EchoClient extends JFrame {
 	public void listen() {
 		String msg=null;
 		try {
-			buffr.readLine();
+			msg=buffr.readLine();
 			area.append(msg+"\n");
 		} catch (IOException e) {
 			e.printStackTrace();

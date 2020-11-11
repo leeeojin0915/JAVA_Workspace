@@ -1,6 +1,6 @@
 /*에코 서버에 접속하여 메세지를 주고받을 클라이언트 작성*/
 
-package day1110.network.EchoServer;
+package day1110.network.echoserver;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
