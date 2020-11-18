@@ -15,15 +15,23 @@ public class FileManager {
 		String[] str=filename.split("\\.");//점을 기준으로 문자열 분리..분리 후에는 배열이 반환됨,\\->익스케이핑
 		return str[1];//두번째 칸이 확장자
 	}
+	//확장자 구하기 업데이트:마지막 점을 기준으로 가져와야 문제가 없다.
+	public static String getExtends2(String filename) {
+		//마지막 점의 위치 구하기 lastIndexOf사용
+		int lastIndex=filename.lastIndexOf(".");
+		
+		//마지막 점 다음 문자부터 가져와야 하므로 +1을 더한다.
+		return filename.substring(lastIndex+1, filename.length());
+	}
 	
 	/*
 	public static void main(String[] args) {
-		String filename=getFilename("https://cdn.reebonzkorea.co.kr/uploads/ckeditor/pictures/165820/20200620_102243___.jpg");
+		String filename=getFilename("https://images-na.ssl-images-amazon.com/images/I/91qvAndeVYL._RI_.jpg");
 		System.out.println(filename);
 		
 		String ext=getExtend(filename);
 		System.out.println(ext);
-	
 	}
 	*/
+	
 }

@@ -1,5 +1,5 @@
 /*
- * JTable에게 정보를 제공하는 객체인 TableModel을 재정의하자
+x * JTable에게 정보를 제공하는 객체인 TableModel을 재정의하자
  * */
 package day1111.board;
 

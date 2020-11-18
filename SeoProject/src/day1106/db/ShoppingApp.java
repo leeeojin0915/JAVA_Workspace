@@ -341,7 +341,7 @@ public class ShoppingApp extends JFrame {
 			rs = pstmt.executeQuery();// 쿼리실행
 
 			while (rs.next()) {// 커서1칸전진
-				ch_top.add(rs.getNString("name"));// 사용자들이 보게 될 아이템
+				ch_top.add(rs.getString("name"));// 사용자들이 보게 될 아이템
 				ch_top2.add(rs.getString("name"));
 
 				map.put(rs.getString("name"), rs.getInt("topcategory_id"));// 해시맵에 key-value의 쌍으로 정보 넣기

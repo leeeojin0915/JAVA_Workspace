@@ -50,7 +50,7 @@ public class RegistForm extends JPanel {
 
 		// 가입버튼과 리스너 연결
 		bt.addActionListener((e) -> {
-			// regist();
+			 regist();
 		});
 		bt_login.addActionListener((e) -> {
 			boardApp.setPage(BoardApp.MEMBER_LOGIN);
