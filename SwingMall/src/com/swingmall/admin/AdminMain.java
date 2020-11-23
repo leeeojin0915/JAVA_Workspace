@@ -84,6 +84,7 @@ public class AdminMain extends JFrame {
 
 		// 조립
 		user_container.setLayout(new BorderLayout());
+		//모든페이지조립
 		for(int i=0;i<page.length;i++) {
 			p_content.add(page[i]);			
 		}
@@ -115,7 +116,6 @@ public class AdminMain extends JFrame {
 					showPage(HOME);
 				} else if (obj == navi[1]) {
 					showPage(PRODUCT);
-					//product.getProdeuctList(null);
 				} else if (obj == navi[2]) {
 					showPage(MEMBER);
 				} else if (obj == navi[3]) {

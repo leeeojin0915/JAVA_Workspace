@@ -2,6 +2,7 @@ package com.swingmall.admin.product;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,6 +32,7 @@ public class Product extends Page {// 상품관리
 	ArrayList<String> topList;// 최상위 카테고리 이름을 담게 될 리스트 top,down,accessary,shoes
 	ArrayList<ArrayList> subList = new ArrayList<ArrayList>();// 모든하위 카테고리
 	ProductModel model;
+	RegistForm registForm;
 
 	public Product(AdminMain adminMain) {
 		super(adminMain);
@@ -47,7 +49,6 @@ public class Product extends Page {// 상품관리
 		for (int i = 0; i < topList.size(); i++) {
 			top.add(getCreatedNode(topList.get(i), subList.get(i)));
 		}
-		
 
 		// 생성
 		p_west = new JPanel();
@@ -57,6 +58,7 @@ public class Product extends Page {// 상품관리
 		s1 = new JScrollPane(tree);
 		s2 = new JScrollPane(table);
 		bt_regist = new JButton("등록하기");
+		registForm = new RegistForm(this);// 등록 폼 생성
 
 		// 스타일 적용
 		s1.setPreferredSize(new Dimension(200, AdminMain.HEIGHT - 100));
@@ -70,16 +72,24 @@ public class Product extends Page {// 상품관리
 		p_center.add(s2);
 		p_center.add(bt_regist);
 
-		this.add(p_west, BorderLayout.WEST);
+		this.add(p_west, BorderLayout.WEST);//공존할 수 없다
 		this.add(p_center);
+		//this.add(registForm);
 
-		getProdeuctList(null);
+		getProductList(null);// 모든 상품 가져오기
 		// tree는 이벤트가 별도로 지원
 		tree.addTreeSelectionListener((e) -> {
-			DefaultMutableTreeNode selectedNode=(DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-			getProdeuctList(selectedNode.toString());//모든상품 가져오기
+			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+			if (selectedNode.toString().equals("상품목록")) {
+				getProductList(null);// 모든 상품 가져오기
+			} else {
+				getProductList(selectedNode.toString());// 모든상품 가져오기
+			}
 		});
 		
+		bt_regist.addActionListener((e)->{
+			addRemoveContent(p_center, registForm);
+		});
 
 	}
 
@@ -129,49 +139,56 @@ public class Product extends Page {// 상품관리
 	}
 
 	// 상품 가져오기
-	public void getProdeuctList(String name) {
+	public void getProductList(String name) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql=null;
-		
-		if(name==null) {//안넘어오면 모든 상품 가져오기
+		String sql = null;
+
+		if (name == null) {// 안넘어오면 모든 상품 가져오기
 			sql = "select * from product";
-		}else {//name값이 넘어오면 조건 쿼리 수행
-			sql="select * from product where subcategory_id=(select subcategory_id from subcategory where name='"+name+"')";
+		} else {// name값이 넘어오면 조건 쿼리 수행
+			sql = "select * from product where subcategory_id=(select subcategory_id from subcategory where name='"
+					+ name + "')";
 		}
 		try {
-			pstmt=getAdminMain().getCon().prepareStatement(sql);
-			rs=pstmt.executeQuery();
-			//메타정보를 이용하여 ProductModel의 Column ArrayList를 채우자
-			ResultSetMetaData meta=rs.getMetaData();
-			ArrayList<String> columnNames=new ArrayList<String>();
-			for(int i=1;i<=meta.getColumnCount();i++) {
-				String colName=meta.getColumnName(i);//컬럼명
+			pstmt = getAdminMain().getCon().prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			// 메타정보를 이용하여 ProductModel의 Column ArrayList를 채우자
+			ResultSetMetaData meta = rs.getMetaData();
+			ArrayList<String> columnNames = new ArrayList<String>();
+			for (int i = 1; i <= meta.getColumnCount(); i++) {
+				String colName = meta.getColumnName(i);// 컬럼명
 				columnNames.add(colName);
 			}
-			//rs의 레코드를 ProductModel의 record ArrayList에 채우자
-			ArrayList<ProductVO> productList=new ArrayList<ProductVO>();
-			while(rs.next()) {
-				ProductVO vo=new ProductVO();//비어있는 vo를 생성해서 rs의 값들을 채워넣기
+			// rs의 레코드를 ProductModel의 record ArrayList에 채우자
+			ArrayList<ProductVO> productList = new ArrayList<ProductVO>();
+			while (rs.next()) {
+				ProductVO vo = new ProductVO();// 비어있는 vo를 생성해서 rs의 값들을 채워넣기
 				vo.setProduct_id(rs.getInt("product_id"));
-				vo.setSubcategory_id(rs. getInt("subcategory_id"));
+				vo.setSubcategory_id(rs.getInt("subcategory_id"));
 				vo.setProduct_name(rs.getString("product_name"));
 				vo.setBrand(rs.getString("brand"));
 				vo.setPrice(rs.getInt("price"));
 				vo.setFilename(rs.getString("filename"));
 				vo.setDetail(rs.getString("detail"));
-				productList.add(vo);//방금 생성하고 하나의 레코드가 채워진 vo를 ArrayList에 추가
+				productList.add(vo);// 방금 생성하고 하나의 레코드가 채워진 vo를 ArrayList에 추가
 			}
-			model=new ProductModel();
-			model.column=columnNames;//컬럼정보대입
-			model.record=productList;//레코드정보대입
-			table.setModel(model);//테이블에 방금 생성한 모델 적용
+			model = new ProductModel();
+			model.column = columnNames;// 컬럼정보대입
+			model.record = productList;// 레코드정보대입
+			table.setModel(model);// 테이블에 방금 생성한 모델 적용
 			table.updateUI();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			getAdminMain().getDbManager().close(pstmt, rs);
 		}
+	}
+	//보여질 컨텐트와 가려질 컨텐트
+	public void addRemoveContent(Component removeObj, Component addObj) {
+		this.remove(removeObj);//제거
+		this.add(addObj);//부착
+		((JPanel)addObj).updateUI();
 	}
 
 	// 트리노트 생성하기
