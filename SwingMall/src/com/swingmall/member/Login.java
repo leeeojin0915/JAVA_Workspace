@@ -122,13 +122,13 @@ public class Login extends Page {
 
 			// rs.next()가 참이면 회원이 존재하는 것이므로 로그인으로 인정해주자
 			// 회원 정보를 vo에 옮겨 담자.
-			if (rs.next()) {
+			while (rs.next()) {
 				vo = new ShopMember();
 				vo.setMember_id(rs.getInt("member_id"));
 				vo.setMid(rs.getString("mid"));
 				vo.setPass(rs.getString("pass"));
-				vo.setName(rs.getNString("name"));
-				vo.setPhone(rs.getNString("phone"));
+				vo.setName(rs.getString("name"));
+				vo.setPhone(rs.getString("phone"));
 				vo.setEmail(rs.getString("email"));
 			}
 		} catch (SQLException e) {
@@ -138,8 +138,9 @@ public class Login extends Page {
 		}
 		return vo;
 	}
-	//로그아웃 처리
-	//1.hasSession값을 false 2.버튼의 배경색 빼기 3.버턴의 텍스트 login으로 바꾸기
+
+	// 로그아웃 처리
+	// 1.hasSession값을 false 2.버튼의 배경색 빼기 3.버턴의 텍스트 login으로 바꾸기
 	public void logout() {
 		getShopMain().setHasSession(false);
 		getShopMain().navi[4].setBackground(null);

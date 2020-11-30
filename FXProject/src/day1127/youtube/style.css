@@ -1,0 +1,8 @@
+VBox{
+	-fx-background-color:lightblue;
+	-fx-alignment:top-center;
+	-fx-spacing:5;
+}
+VBox{
+	-fx-pref-width:200;
+}

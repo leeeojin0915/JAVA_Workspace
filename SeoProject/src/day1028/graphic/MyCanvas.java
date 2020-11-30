@@ -12,7 +12,7 @@ public class MyCanvas extends Canvas{
 	
 	public MyCanvas() {
 		kit = Toolkit.getDefaultToolkit(); //자체 클래스 메서드(static)를 통해 인스턴스 얻는 방식!!
-		img = kit.getImage("D:/workspace/java_workspace/SeProject/res/travel2/aa.jpg"); //윈도우 os
+		img = kit.getImage("D:/koreaIT/Workspace/java_workspace/SeoProject/src/res/auto.png"); //윈도우 os
 	}
 	//부모인 켄버스가 보유한  paint메서드를 무시해버리고, 우리 상황에 맞게 재정의하자!!
 	//override
@@ -39,7 +39,7 @@ public class MyCanvas extends Canvas{
 		// 시스템에 하드디스크 경로를 이용하여 이미지를 가져올 경우엔, 플랫폼을 통해 이미지 객체를 가져올수 
 		// 있는 Toolkit객체를 이용해야 하므로 , 이미지를 얻기전에 우선 툴킷 객체의 인스턴스부터 얻자!!
 		
-		g.drawImage(img, 20, 20, this);//이미지 관찰자는 켄버스로 하자!!
+		g.drawImage(img, 0, 0, this);//이미지 관찰자는 켄버스로 하자!!
 	}
 }
 

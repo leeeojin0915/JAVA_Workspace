@@ -1,5 +1,6 @@
 package com.swingmall.home;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -24,6 +25,7 @@ public class Home extends Page {
 		super(shopMain);
 		p_content = new JPanel();
 		p_content.setPreferredSize(new Dimension(ShopMain.WIDTH - 40, ShopMain.HEIGHT - 150));
+		p_content.setBackground(Color.BLUE);;
 		add(p_content);
 
 		getProductList();

@@ -14,20 +14,24 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.movietheater.admin.home.AdminMovieHome;
-import com.movietheater.admin.info.copy.AdminMovieInfo;
+import com.movietheater.admin.info.AdminMovieInfo;
+import com.movietheater.admin.info.AdminMovieInfoModi;
+import com.movietheater.admin.info.AdminMovieInfoRegist;
 import com.movietheater.admin.member.AdminMyMoviePage;
 import com.movietheater.db.MovieDBManager;
-import com.movietheater.reservation.MovieReservation;
 
 public class AdminMovieTheaterMain extends JFrame {
 	public static final int WIDTH = 1200;
-	public static final int HEIGHT = 600;
+	public static final int HEIGHT = 700;
 	public static final int AD_MOVIE_HOME = 0;
 	public static final int AD_MOVIE_INFO = 1;
 	public static final int AD_MOVIE_MEMBER = 2;
 
-	MovieDBManager movieDBManager;
-	Connection con;
+	public static final int AD_MOVIE_INFO_REGIST = 3;
+	public static final int AD_MOVIE_INFO_MODI = 4;
+
+	private MovieDBManager movieDBManager;
+	private Connection con;
 
 	JPanel bigContainer;// 사용자,관리자 영역
 	JPanel container;// 페이지 붙일영역
@@ -35,7 +39,7 @@ public class AdminMovieTheaterMain extends JFrame {
 	String[] bt = { "홈관리", "영화정보관리", "회원관리" };
 	JButton[] button = new JButton[bt.length];
 
-	ArrayList<AdminMovieFrame> moviePage = new ArrayList<AdminMovieFrame>();
+	private ArrayList<AdminMovieFrame> moviePage = new ArrayList<AdminMovieFrame>();
 	// MovieFrame[] moviePage = new MovieFrame[3];
 
 	public AdminMovieTheaterMain() {
@@ -64,6 +68,8 @@ public class AdminMovieTheaterMain extends JFrame {
 		moviePage.add(new AdminMovieHome(this));
 		moviePage.add(new AdminMovieInfo(this));
 		moviePage.add(new AdminMyMoviePage(this));
+		moviePage.add(new AdminMovieInfoRegist(this));
+		moviePage.add(new AdminMovieInfoModi(this));
 
 		for (int i = 0; i < moviePage.size(); i++) {
 			container.add(moviePage.get(i));
@@ -101,6 +107,7 @@ public class AdminMovieTheaterMain extends JFrame {
 					showPage(AD_MOVIE_HOME);
 				} else if (obj == button[1]) {
 					showPage(AD_MOVIE_INFO);
+
 				} else if (obj == button[2]) {
 					showPage(AD_MOVIE_MEMBER);
 				}
@@ -117,6 +124,19 @@ public class AdminMovieTheaterMain extends JFrame {
 				moviePage.get(i).setVisible(false);
 			}
 		}
+	}
+
+	public MovieDBManager getMovieDBManager() {
+		return movieDBManager;
+	}
+
+	public Connection getCon() {
+		return con;
+	}
+	
+
+	public ArrayList<AdminMovieFrame> getMoviePage() {
+		return moviePage;
 	}
 
 	public static void main(String[] args) {
